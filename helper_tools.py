@@ -549,31 +549,3 @@ def weighted_mean_quadratic_weighted_kappa(solution, submission):
     weights = [group[1]["essay_weight"].irow(0) for group in groups]
     return mean_quadratic_weighted_kappa(kappas, weights=weights)
     
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ifile", help="Input file")
-    parser.add_argument("--d", help="Delimiter. Default: Comma")
-    parser.add_argument("--score", help="Score Column. Default: score")
-    parser.add_argument("--target", help="Target Column. Default: target")
-    parser.add_argument("--tag", help="Output Files Tag. Default: performance")
-    parser.add_argument("--title", help="Charts Title. Default: None")
-    
-    args = parser.parse_args()
-    infile = args.ifile
-    score = args.score if args.score else 'score'
-    target = args.target if args.target else 'target'
-    tag = args.tag if args.tag else 'performance'
-    delimiter = args.d if args.d else ','
-    title = args.title+':' if args.title else ''
-    
-    score_card=pd.read_csv(infile,delimiter=delimiter,usecols=[score,target])
-    auc,ks,ks_score=get_roc(score_card,score,target,title)
-    plt.savefig('%s_roc.png'%tag)
-    get_cum_gains(score_card,score,target,title)
-    plt.savefig('%s_cum_gains.png'%tag)
-    get_precision_recall(score_card,score,target,title)
-    plt.savefig('%s_precision_recall.png'%tag)
-    decile_analysis=get_deciles_analysis(score_card,score,target)
-    decile_analysis.to_csv('%s_decile_analysis.csv'%tag)
-    pd.Series([auc,ks,ks_score],index=['auc','ks','ks_score']).to_csv('%s_summary.csv'%tag)
-    

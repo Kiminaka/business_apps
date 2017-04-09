@@ -15,12 +15,12 @@ import itertools
 from itertools import cycle
 from scipy import interp
 
-def run_classifier_metrics(X, y,classifier):
-    accuracy = cross_val_score(classifier, X, y, scoring='accuracy', cv=10).mean()
-    precision = cross_val_score(classifier, X, y, scoring='precision', cv=10 ).mean()
-    recall = cross_val_score(classifier, X, y, scoring='recall', cv=10).mean()
-    f1 = cross_val_score(classifier, X, y, scoring='f1', cv=10).mean()
-    roc_auc = cross_val_score(classifier, X, y, scoring='roc_auc', cv=10).mean()
+def run_classifier_metrics(X, y,classifier,k):
+    accuracy = cross_val_score(classifier, X, y, scoring='accuracy', cv=k).mean()
+    precision = cross_val_score(classifier, X, y, scoring='precision', cv=k ).mean()
+    recall = cross_val_score(classifier, X, y, scoring='recall', cv=k).mean()
+    f1 = cross_val_score(classifier, X, y, scoring='f1', cv=k).mean()
+    roc_auc = cross_val_score(classifier, X, y, scoring='roc_auc', cv=k).mean()
     print("-----------------Cross validation scores----------------- \n accuracy {0} \n precision {1} \n recall {2} \n f1 {3} \n roc score {3} \n".format(accuracy, precision, recall, f1, roc_auc))
 
 def run_cross_val_confusion(X, y,classifier,k=5):
@@ -101,7 +101,7 @@ def plot_confusion_matrix(cm, classes,
     plt.show()
 
 def run_performance(X, y,classifier, classes,k):
-    run_classifier_metrics(X, y,classifier)
+    run_classifier_metrics(X, y,classifier,k)
 
     y_true_unnest, y_pred_unnest = run_cross_val_confusion(X, y,classifier,k)
 
